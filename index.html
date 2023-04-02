@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Monkey Run Game</title>
+	<style>
+		canvas {
+			border: 1px solid black;
+		}
+		#rebha{
+			position: fixed;
+			top: 0;
+			right: 0;
+			width: 40%;
+		}
+		#rebha img{
+			width: 50%;
+		}
+		#bdy img{
+			width: 50%;
+		}
+		.btnn{
+			width: 150px;
+			height: 100px;
+		}
+		
+	</style>
+</head>
+<body id="bdy">
+	
+	<canvas id="canvas" width="500" height="450"></canvas>
+	<br><br><br>
+	<table class="botonat" width="500">
+		<tr>
+		<td><button class="btnn" onclick="moveUp()"> tle3 </button></td>
+		<td><button class="btnn" onclick="moveDown()"> howed </button></td>
+		</tr>
+	</table>
+	<img id="monkey" src="monkey.png" style="display:none;">
+	<img id="obstacle" src="obstacle.png" style="display:none; width: 100px;">
+	<img id="trophy" src="trophy.png" style="display:none;">
+	<script> 
+	// Define game variables
+		var canvas = document.getElementById('canvas');
+		var ctx = canvas.getContext('2d');
+		var monkey = document.getElementById('monkey');
+		var obstacle = document.getElementById('obstacle');
+		var trophy = document.getElementById('trophy');
+		var br = document.createElement("br");
+		var monkeyX = 50;
+		var monkeyY = 225;
+		var obstacleX = 500;
+		var obstacleY = 225;
+		var trophyX = 500;
+		var trophyY = 225;
+		var score = 0;
+		var gameOver =0;
+		
+		// Define game functions
+		function update() {
+			// Update obstacle position
+			if(score <1000){
+			obstacleX -= 5;
+			}
+			if(score >=1000){
+				obstacleX -= 7;
+			} 
+			if(score >=2000){
+				obstacleX -= 2;
+			}
+			if (score >=3000){
+				obstacleX -= 2 ;
+			}
+			if (score ==3400){
+				gameOver=1;
+			}
+			if (obstacleX < -50) {
+				score += 10;
+				if(monkeyY>250){
+					obstacleX = 500;
+					obstacleY= 250;
+				}
+				if(monkeyY<=250){
+					obstacleX = 500;
+					obstacleY= 100;
+				}
+			}
+		
+			// Update trophy position
+			trophyX -= 5;
+		
+			// Update score and stop game if player reaches 100 points
+			if (score == 100) {
+				score = 1000;
+				cancelAnimationFrame(animationID);
+				var img = document.createElement("img");
+				img.src = "trophy.png";
+				var src = document.getElementById("rebha");
+				src.appendChild(img);	
+				
+			}
+			if (score == 1200) {
+				score = 2000;
+				cancelAnimationFrame(animationID);
+				var img = document.createElement("img");
+				img.src = "boudan.png";
+				var src = document.getElementById("rebha");
+				src.appendChild(img);	
+					
+			}
+			if (score == 2300) {
+				score = 3000;
+				cancelAnimationFrame(animationID);
+				var img = document.createElement("img");
+				img.src = "ker3in.jpg";
+				var src = document.getElementById("rebha");
+				src.appendChild(img);	
+				
+			}
+		
+			// Detect collision
+			if (monkeyX < obstacleX + 50 &&
+				monkeyX + 50 > obstacleX &&
+				monkeyY < obstacleY + 150 &&
+				50 + monkeyY > obstacleY) {
+				alert("YoHoHoHoHo !!!")
+				score = 0;
+				document.getElementById('rebha').innerHTML="";
+				obstacleX = 500;
+			}
+		
+			// Draw game on canvas
+			ctx.clearRect(0, 0, canvas.width, canvas.height);
+			ctx.drawImage(monkey, monkeyX, monkeyY, 50, 50);
+			ctx.drawImage(obstacle, obstacleX, obstacleY, 50, 150);
+			//ctx.drawImage(trophy, trophyX, trophyY, 50, 50);
+			ctx.fillText("Score: " + score, 400, 50);
+		
+			// Call update function again
+			if(gameOver ==0){
+				animationID = requestAnimationFrame(update);
+			}else{
+				var img = document.createElement("img");
+				img.src = "monkey.png";
+				document.getElementById('bdy').innerHTML="";
+				var src = document.getElementById('bdy');
+				src.appendChild(img);	
+			}
+		}
+		
+		function moveUp() {
+			if (monkeyY > 100) {
+				monkeyY -= 50;
+			}
+		}
+		
+		function moveDown() {
+			if (monkeyY < 300) {
+				monkeyY += 50;
+			}
+		}
+		
+		// Add event listeners
+		document.addEventListener('keydown', function(event) {
+			if (event.code === 'ArrowUp') {
+				moveUp();
+			} else if (event.code === 'ArrowDown') {
+				moveDown();
+			}
+		});
+		
+		// Start game
+		if(gameOver ==0){
+		var animationID = requestAnimationFrame(update);
+		}else{
+			var img = document.createElement("img");
+			img.src = "monkey.png";
+			var src = document.getElementById("canvas");
+			src.appendChild(img);	
+		}
+		</script>
+	<div id="rebha">
+	</div>
+</body>
+</html>
